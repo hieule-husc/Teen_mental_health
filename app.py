@@ -35,7 +35,7 @@ def load_data():
     try:
         # Thử load từ CSV trước
         try:
-            df = pd.read_csv('data/Teen_Mental_Health_Dataset.csv', encoding='utf-8-sig')
+            df = pd.read_csv('F:/Khoa học dữ liệu/Tiểu luận/project_mental_health/data/Teen_Mental_Health_Dataset.csv', encoding='utf-8-sig')
             st.success("✅ Đã load từ file CSV")
         except FileNotFoundError:
             # Nếu không có CSV, thử load từ Excel
