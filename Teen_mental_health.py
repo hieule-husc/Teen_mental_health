@@ -33,13 +33,46 @@ os.makedirs('models', exist_ok=True)
 @st.cache_data
 def load_data():
     try:
-        # Thử load từ đường dẫn tương đối
-        df = pd.read_csv('data/Teen_Mental_Health_Dataset.csv', encoding='utf-8-sig')
-    except FileNotFoundError:
-        st.error("⚠️ File 'Teen_Mental_Health_Dataset.csv' không tìm thấy!")
-        st.info("Vui lòng upload file CSV vào thư mục 'data/'")
+        # Thử load từ CSV trước
+        try:
+            df = pd.read_csv('data/Teen_Mental_Health_Dataset.csv', encoding='utf-8-sig')
+            st.success("✅ Đã load từ file CSV")
+        except FileNotFoundError:
+            # Nếu không có CSV, thử load từ Excel
+            try:
+                df = pd.read_excel('data/Teen_Mental_Health_Dataset.xlsx')
+                st.success("✅ Đã load từ file Excel")
+            except FileNotFoundError:
+                # Cuối cùng thử file Excel tên khác
+                try:
+                    df = pd.read_excel('data/Teen_Mental_Health_Dataset.xls')
+                    st.success("✅ Đã load từ file Excel")
+                except FileNotFoundError:
+                    # Liệt kê các file trong thư mục data
+                    st.error("❌ File 'Teen_Mental_Health_Dataset' không tìm thấy!")
+                    
+                    if os.path.exists('data'):
+                        files = os.listdir('data')
+                        if files:
+                            st.info(f"📁 Các file trong thư mục 'data': {files}")
+                        else:
+                            st.warning("📁 Thư mục 'data' trống!")
+                    
+                    st.info("""
+                    🔧 **Cách khắc phục:**
+                    1. Đặt file Dataset vào thư mục 'data/'
+                    2. Tên file phải là một trong những cái sau:
+                       - Teen_Mental_Health_Dataset.csv
+                       - Teen_Mental_Health_Dataset.xlsx
+                       - Teen_Mental_Health_Dataset.xls
+                    """)
+                    return None
+        
+        return df
+    
+    except Exception as e:
+        st.error(f"❌ Lỗi khi load dữ liệu: {e}")
         return None
-    return df
 
 df = load_data()
 
