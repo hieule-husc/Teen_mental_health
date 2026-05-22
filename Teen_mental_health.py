@@ -1,7 +1,3 @@
-# %%
-pip install --upgrade numexpr bottleneck
-
-# %%
 import warnings
 warnings.filterwarnings('ignore')
 
